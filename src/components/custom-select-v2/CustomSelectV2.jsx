@@ -27,7 +27,7 @@ const options = [
 ]
 
 export const CustomSelectV2 = () => {
-	const [dropdownIsOpen, setDropdownIsOpen] = useState(true)
+	const [dropdownIsOpen, setDropdownIsOpen] = useState(false)
 	const [selectedOption, setSelectedOption] = useState('')
 
 	return (

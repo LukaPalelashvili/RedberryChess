@@ -28,8 +28,10 @@ module.exports = {
 				},
 			},
 			backgroundImage: {
-				landing: "url('./assets/img/landing-page.png')",
-				secondary: "url('./assets/img/secondary.png')",
+				landing: "url('./assets/img/covers/landing-page.png')",
+				secondary: "url('./assets/img/covers/secondary.png')",
+				experience: "url('./assets/img/covers/experience.png')",
+				final: "url('./assets/img/covers/final.png')",
 			},
 			fontFamily: {
 				sans: ['Open Sans', 'sans-serif'],

@@ -1,59 +1,145 @@
-import { Button } from '../button/Button'
-import InputMask from 'react-input-mask'
+import { useContext } from 'react'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import { ToastContainer, toast } from 'react-toastify'
+import * as _ from 'lodash'
+import moment from 'moment'
+import '../../assets/css/toastify.css'
+import { PageContext } from '../../index'
+import { SectionTitle } from '../section-title/SectionTitle'
+import { ProgressSteps } from '../progress-steps/ProgressSteps'
+import { ActionButtons } from '../action-buttons/ActionButtons'
+import { ToastrError } from '../toastr-error/ToastrError'
 
-export const UserInfo = () => (
-	<div className="flex flex-col w-1/2">
-		<div className="flex gap-1 items-center border-b border-gray-800 h-20">
-			<span className="font-sans text-base pl-12">Start Creating Your Account</span>
-		</div>
-		<div className="pl-12">
-			<div className="flex mt-16 gap-12">
-				<div className="flex flex-col items-center relative gap-2">
-					<div className="w-10 h-10 flex justify-center items-center rounded-lg bg-green-100 text-black font-bold relative">
-						1
-						<span className="w-32 h-0.5 bg-gray-200 absolute top-1/2 left-[120%]" />
-					</div>
-					<span className="font-sans text-base">Personal Information</span>
-				</div>
-				<div className="flex flex-col items-center gap-2">
-					<div className="w-10 h-10 flex justify-center items-center border rounded-lg border-gray-400 bg-gray-100 text-black">
-						2
-					</div>
-					<span className="font-sans text-base">Chess Experience</span>
+const PersonalInfoSchema = Yup.object().shape({
+	name: Yup.string().min(2).max(50).required(),
+	email: Yup.string().email('Invalid email').required(),
+	phone: Yup.string().min(9).max(9).required(),
+	dateOfBirth: Yup.string()
+		.required('DOB is Required')
+		.test('DOB', 'Please choose a valid date of birth', value => {
+			return moment().diff(moment(value), 'years') >= 15
+		}),
+})
+
+export const UserInfo = () => {
+	const { changePage } = useContext(PageContext)
+	const formik = useFormik({
+		initialValues: {
+			name: '',
+			email: '',
+			phone: '',
+			dateOfBirth: '',
+		},
+		validationSchema: PersonalInfoSchema,
+		onSubmit: values => {
+			alert(JSON.stringify(values, null, 2))
+		},
+	})
+
+	const handleNextClick = () => {
+		console.log(formik.values)
+		_.forEach(formik.errors, (val, key) =>
+			toast(<ToastrError title={key} description={val} />, {
+				position: 'top-right',
+				autoClose: 4000,
+				hideProgressBar: true,
+				closeOnClick: true,
+				pauseOnHover: true,
+				draggable: true,
+				progress: undefined,
+			}),
+		)
+		formik.submitForm().then(r => console.log(r))
+		//changePage('chess-experience')
+	}
+
+	const handleInputChange = field => {
+		const form = localStorage.getItem('signupForm')
+		localStorage.setItem(
+			'signupForm',
+			JSON.stringify({ ...JSON.parse(form), [field]: formik.values?.[field] }),
+		)
+	}
+
+	return (
+		<div className="flex flex-col w-1/2">
+			<SectionTitle title="Start Creating Your Account" />
+			<div className="pl-12">
+				<ProgressSteps step={1} />
+				<div className="flex flex-col gap-5 mt-32">
+					<h1 className="text-4xl">Personal Information</h1>
+					<p className="text-sm text-gray-500 capitalize">These are basic information fields</p>
+					<form className="flex flex-col gap-5 w-3/4 mt-16" onSubmit={formik.handleSubmit}>
+						<input
+							onChange={e => {
+								formik.handleChange(e)
+								handleInputChange('name')
+							}}
+							value={formik.values.name}
+							name="name"
+							type="text"
+							placeholder="Name"
+							className={`h-12 pl-4 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500 ${
+								formik.touched.name &&
+								formik.errors.name &&
+								'bg-red-100 text-red-700 placeholder:text-red-700 hover:bg-red-100 focus:bg-red-100'
+							}`}
+						/>
+						<input
+							onChange={e => {
+								formik.handleChange(e)
+								handleInputChange('email')
+							}}
+							value={formik.values.email}
+							name="email"
+							type="email"
+							placeholder="Email address"
+							className={`h-12 pl-4 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500 ${
+								formik.touched.email &&
+								formik.errors.email &&
+								'bg-red-100 text-red-700 placeholder:text-red-700 hover:bg-red-100 focus:bg-red-100'
+							}`}
+						/>
+						<input
+							onChange={e => {
+								formik.handleChange(e)
+								handleInputChange('phone')
+							}}
+							value={formik.values.phone}
+							name="phone"
+							placeholder="Phone number"
+							className={`h-12 pl-4 pr-2 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500 ${
+								formik.touched.phone &&
+								formik.errors.phone &&
+								'bg-red-100 text-red-700 placeholder:text-red-700 hover:bg-red-100 focus:bg-red-100'
+							}`}
+							type="number"
+						/>
+						<input
+							onChange={e => {
+								formik.handleChange(e)
+								handleInputChange('dateOfBirth')
+							}}
+							value={formik.values.dateOfBirth}
+							name="dateOfBirth"
+							placeholder="Date of birth"
+							className={`h-12 pl-4 pr-2 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500 ${
+								formik.touched.dateOfBirth &&
+								formik.errors.dateOfBirth &&
+								'bg-red-100 text-red-700 placeholder:text-red-700 hover:bg-red-100 focus:bg-red-100'
+							}`}
+							type="text"
+							onFocus={e => (e.target.type = 'date')}
+							onBlur={e => (!e.target.value ? (e.target.type = 'text') : null)}
+						/>
+					</form>
+					<ActionButtons onBack={() => changePage('home')} onNext={handleNextClick} />
+					<ToastContainer>
+						<div>hiiii</div>
+					</ToastContainer>
 				</div>
 			</div>
-			<div className="flex flex-col gap-5 mt-32">
-				<h1 className="text-4xl">Personal Information</h1>
-				<p className="text-sm text-gray-500 capitalize">These are basic information fields</p>
-				<form className="flex flex-col gap-5 w-3/4 mt-16" action="">
-					<input
-						type="text"
-						placeholder="Name"
-						className="h-12 pl-4 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500"
-					/>
-					<input
-						type="email"
-						placeholder="Email address"
-						className="h-12 pl-4 border-b border-dotted text-red-700 text-xl bg-red-100 placeholder:text-red-700 hover:bg-red-100 focus:outline-0 focus:bg-red-100 focus:ring-0 border-gray-500"
-					/>
-					<InputMask
-						mask="599 99 99 99"
-						placeholder="Phone number"
-						className="h-12 pl-4 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500"
-						maskPlaceholder="dd/mm/yy"
-					/>
-					<InputMask
-						mask="99/99/9999"
-						placeholder="Date of birth"
-						className="h-12 pl-4 border-b border-dotted text-black text-xl placeholder:text-black hover:bg-gray-300 focus:outline-0 focus:bg-gray-200 border-gray-500"
-						maskPlaceholder="dd/mm/yy"
-					/>
-				</form>
-				<div className="flex justify-between w-3/4 mt-24">
-					<Button secondary>Back</Button>
-					<Button withArrow>Next</Button>
-				</div>
-			</div>
 		</div>
-	</div>
-)
+	)
+}
