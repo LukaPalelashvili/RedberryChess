@@ -1,6 +1,5 @@
 import './App.css'
 import { LeftContent } from './components/left-content/LeftContent'
-import { Intro } from './components/intro/Intro'
 import { UserInfo } from './components/user-info/UserInfo'
 
 function App() {
