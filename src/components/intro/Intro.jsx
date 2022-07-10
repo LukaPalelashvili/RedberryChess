@@ -1,6 +1,7 @@
 import { Button } from '../button/Button'
 import { useContext } from 'react'
 import { PageContext } from '../../index'
+import { Link } from 'react-router-dom'
 
 export const Intro = () => {
 	const { changePage } = useContext(PageContext)
@@ -16,9 +17,11 @@ export const Intro = () => {
 					who we are
 				</h1>
 				<div className="pl-20 mt-20">
-					<Button onClick={() => changePage('personal-info')} withArrow classList="border-orange">
-						Get Started
-					</Button>
+					<Link to="/personal-info">
+						<Button onClick={() => changePage('personal-info')} withArrow classList="border-orange">
+							Get Started
+						</Button>
+					</Link>
 				</div>
 			</div>
 		</div>

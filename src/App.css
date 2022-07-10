@@ -49,3 +49,35 @@ input[type="date"]::-webkit-calendar-picker-indicator {
     display: none;
     -webkit-appearance: none;
 }
+
+.email-field::after{
+    content: '*';
+    position: absolute;
+    top: 13px;
+    left: 146px;
+    color: #f00
+}
+
+.name-field::after{
+    content: '*';
+    position: absolute;
+    top: 13px;
+    left: 72px;
+    color: #f00
+}
+
+.phone-field::after{
+    content: '*';
+    position: absolute;
+    top: 13px;
+    left: 151px;
+    color: #f00
+}
+
+.date_of_birth-field::after{
+    content: '*';
+    position: absolute;
+    top: 13px;
+    left: 128px;
+    color: #f00
+}
