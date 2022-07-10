@@ -19,6 +19,7 @@ module.exports = {
 					300: '#F8F9FA',
 					400: '#E5E6E8',
 					500: '#95939A',
+					600: '#F7F7F9',
 					800: '#B9B4C34D',
 				},
 				red: {
@@ -33,6 +34,9 @@ module.exports = {
 			fontFamily: {
 				sans: ['Open Sans', 'sans-serif'],
 				nunito: ['Nunito', 'sans-serif'],
+			},
+			boxShadow: {
+				xl: '0px 2px 4px rgba(0, 0, 0, 0.1);',
 			},
 		},
 	},
